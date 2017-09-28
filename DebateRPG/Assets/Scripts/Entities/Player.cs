@@ -13,18 +13,21 @@ public class Player : Entity {
 	private bool isGrounded = false;
 
 	private Rigidbody2D rb;
+	private SpriteRenderer sr;
+
+	private BoxCollider2D groundDetector;
 
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody2D> ();
+		sr = GetComponentInChildren<SpriteRenderer> ();
+		groundDetector = GetComponent<BoxCollider2D> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		// Grounded Test
-		RaycastHit2D hit = Physics2D.Raycast (new Vector2(transform.position.x, transform.position.y), Vector2.down, 1f);
-		isGrounded = hit.collider != null;
-		Debug.Log (isGrounded);
+		isGrounded = groundDetector.IsTouchingLayers();
 
 		// Move
 		Vector2 velo = Vector2.zero;
@@ -32,15 +35,21 @@ public class Player : Entity {
 
 		if (InputController.isButtonDown (GameButton.LEFT)) {
 			velo.x = speed * -1;
+			facingRight = false;
 		}
 		if (InputController.isButtonDown (GameButton.RIGHT)) {
 			velo.x = speed;
+			facingRight = true;
 		}
 		rb.velocity = velo;
 		if (InputController.isButtonJustDown (GameButton.JUMP) && isGrounded) {
 			rb.AddForce(Vector2.up * jumpForce);
 		}
 
-
+		// Flip
+		sr.flipX = !facingRight;
 	}
+
+
+	
 }

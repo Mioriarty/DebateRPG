@@ -9,7 +9,7 @@ public class Entity : MonoBehaviour {
 	public int crntHealth;
 
 	public float speed;
-	private bool facingRight = true;
+	protected bool facingRight = true;
 
 	void Start () {
 		
