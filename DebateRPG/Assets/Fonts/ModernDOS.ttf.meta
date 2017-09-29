@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 779ebb06b2c214fe38b3e203d1f930cd
+timeCreated: 1506687558
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Modern DOS 8x16
+  fontNames:
+  - Modern DOS 8x16
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

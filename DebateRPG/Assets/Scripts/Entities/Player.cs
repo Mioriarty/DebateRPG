@@ -21,7 +21,7 @@ public class Player : Entity {
 	void Start () {
 		rb = GetComponent<Rigidbody2D> ();
 		sr = GetComponentInChildren<SpriteRenderer> ();
-		groundDetector = GetComponent<BoxCollider2D> ();
+		groundDetector = GetComponentInChildren<BoxCollider2D> ();
 	}
 	
 	// Update is called once per frame
@@ -44,10 +44,21 @@ public class Player : Entity {
 		rb.velocity = velo;
 		if (InputController.isButtonJustDown (GameButton.JUMP) && isGrounded) {
 			rb.AddForce(Vector2.up * jumpForce);
+			Dialogue.i.requestClick ();
 		}
 
 		// Flip
 		sr.flipX = !facingRight;
+	}
+
+
+	void OnTriggerEnter2D(Collider2D c){
+		switch (c.tag) {
+		case "Enemy":
+			print ("Start Fight");
+			break;
+
+		}
 	}
 
 
