@@ -11,9 +11,13 @@ public class Player : Entity {
 	public float jumpForce = 10;
 
 	private bool isGrounded = false;
+	private bool swordEquiped = false;
+
+	private bool jumped = false;
 
 	private Rigidbody2D rb;
 	private SpriteRenderer sr;
+	private Animator animator;
 
 	private BoxCollider2D groundDetector;
 
@@ -22,6 +26,7 @@ public class Player : Entity {
 		rb = GetComponent<Rigidbody2D> ();
 		sr = GetComponentInChildren<SpriteRenderer> ();
 		groundDetector = GetComponentInChildren<BoxCollider2D> ();
+		animator = GetComponentInChildren<Animator> ();
 	}
 	
 	// Update is called once per frame
@@ -29,6 +34,10 @@ public class Player : Entity {
 		// Grounded Test
 		isGrounded = groundDetector.IsTouchingLayers();
 
+
+	}
+
+	void FixedUpdate(){
 		// Move
 		Vector2 velo = Vector2.zero;
 		velo.y = rb.velocity.y;
@@ -38,13 +47,22 @@ public class Player : Entity {
 			facingRight = false;
 		}
 		if (InputController.isButtonDown (GameButton.RIGHT)) {
-			velo.x = speed;
+			velo.x += speed;
 			facingRight = true;
 		}
+		animator.SetBool ("moving", velo.x != 0);
+		//animator.SetBool ("swordEquiped", swordEquiped);
 		rb.velocity = velo;
-		if (InputController.isButtonJustDown (GameButton.JUMP) && isGrounded) {
-			rb.AddForce(Vector2.up * jumpForce);
-			Dialogue.i.requestClick ();
+		if (!jumped) {
+			if (InputController.isButtonJustDown (GameButton.JUMP) && isGrounded) {
+				velo.y = 0;
+				rb.velocity = velo;
+				rb.AddForce (Vector2.up * jumpForce);
+				Dialogue.i.requestClick ();
+				jumped = true;
+			}
+		} else {
+			jumped = false;
 		}
 
 		// Flip
