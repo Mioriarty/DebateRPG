@@ -18,8 +18,12 @@ public class InputController : MonoBehaviour {
 		i = this;
 	}
 
+	private static bool isLocked = false;
+
 	public static bool isButtonDown (GameButton button){
-		if (SystemInfo.deviceType == DeviceType.Desktop && false) {
+		if (isLocked)
+			return false;
+		if (SystemInfo.deviceType == DeviceType.Desktop) {
 			switch (button) {
 			case GameButton.JUMP:
 				return Input.GetKey (KeyCode.Space);
@@ -42,7 +46,10 @@ public class InputController : MonoBehaviour {
 	}
 
 	public static bool isButtonJustDown(GameButton button){
-		if (SystemInfo.deviceType == DeviceType.Desktop && false) {
+		if (isLocked)
+			return false;
+		
+		if (SystemInfo.deviceType == DeviceType.Desktop) {
 			switch (button){
 			case GameButton.JUMP:
 				return Input.GetKeyDown(KeyCode.Space);
@@ -62,5 +69,13 @@ public class InputController : MonoBehaviour {
 			}
 		}
 		return false;
+	}
+
+	public static void lockInput(){
+		isLocked = true;
+	}
+
+	public static void unlockInput(){
+		isLocked = false;
 	}
 }

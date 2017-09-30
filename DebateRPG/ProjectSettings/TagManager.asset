@@ -4,7 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Enemy
+  - Spawnpoint
+  - RemoveInBattle
+  - EnemyGroop
+  - NPC
   layers:
   - Default
   - TransparentFX

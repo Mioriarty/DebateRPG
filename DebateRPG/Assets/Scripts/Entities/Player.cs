@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player : Entity {
 
@@ -19,20 +20,25 @@ public class Player : Entity {
 	private SpriteRenderer sr;
 	private Animator animator;
 
-	private BoxCollider2D groundDetector;
+	[SerializeField]
+	private Transform groundDetector1;
+	[SerializeField]
+	private Transform groundDetector2;
 
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody2D> ();
 		sr = GetComponentInChildren<SpriteRenderer> ();
-		groundDetector = GetComponentInChildren<BoxCollider2D> ();
 		animator = GetComponentInChildren<Animator> ();
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		// Grounded Test
-		isGrounded = groundDetector.IsTouchingLayers();
+		Collider2D c = Physics2D.OverlapArea(Utils.vec3To2(groundDetector1.position), Utils.vec3To2(groundDetector2.position));
+		isGrounded = c != null && c.tag != "Player";
+		animator.SetBool ("grounded", isGrounded);
 
 
 	}
@@ -71,12 +77,35 @@ public class Player : Entity {
 
 
 	void OnTriggerEnter2D(Collider2D c){
-		switch (c.tag) {
-		case "Enemy":
-			print ("Start Fight");
+		switch (c.gameObject.tag) {
+		case "EnemyGroop":
+			List<GameObject> children = new List<GameObject> ();
+			foreach (Transform t in c.gameObject.transform) {
+				children.Add (t.gameObject);
+			}
+			BattleStarter.initBattle (this, children.ToArray ());
 			break;
-
+		case "NPC":
+			c.gameObject.GetComponent<NPC> ().playerEnters ();
+			break;
 		}
+	}
+
+	void OnTriggerExit2D(Collider2D c){
+		switch (c.gameObject.tag) {
+		case "NPC":
+			c.gameObject.GetComponent<NPC> ().playerExits ();
+			break;
+		}
+	}
+
+	public void prepareForBattle(){
+		animator.SetBool ("grounded", true);
+		animator.SetBool ("swordEquiped", true);
+		animator.SetBool ("moving", false);
+		gameObject.GetComponent<PlayerBattle> ().enabled = true;
+		rb.simulated = false;
+		enabled = false;
 	}
 
 

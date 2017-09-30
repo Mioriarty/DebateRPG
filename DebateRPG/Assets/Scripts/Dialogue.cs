@@ -74,6 +74,8 @@ public class Dialogue : MonoBehaviour {
 
 	private DialogueGuide guide;
 
+	public static event System.Action dialogueEndEvent;
+
 	public static Dialogue i;
 	void Awake(){
 		i = this;
@@ -83,19 +85,13 @@ public class Dialogue : MonoBehaviour {
 	void Start () {
 		text = GetComponentInChildren<Text> ();
 		animator = GetComponentInChildren<Animator> ();
-
-		DialogueData dd = new DialogueData (new string[]{ "Hund: ", "Besitzer: ", "Hund: ", "Besitzer: " }, new string[] {
-			"Ich liebe dich!",
-			"Ich hasse dich!",
-			"Oh. Ich hasse dich eigentlich auch",
-			"sodunv sourvnowrnv rwoweunv woweu onvpw epwei pöwrifvpiwnv rwin pwrn pwrnvip pwe pwivnip pewi owevnpw piwv pwefnpiew es fpirwbgw pirgn eipw oprwgh psfigjpwri prw owpe ipgnpiwgfhpwe gipwe eipwgnwpeh epg gepw "
-		});
-
-		resetDialogue (dd);
-		showDialogue ();
-
 	}
-	
+
+	void Update(){
+		if (Input.GetMouseButtonDown (0)) {
+			requestClick ();
+		}
+	}
 
 	void setText(string[] speach){
 		textToShow = speach[0] + speach[1];
@@ -114,14 +110,16 @@ public class Dialogue : MonoBehaviour {
 		
 
 	public void showDialogue(){
-		isVisible = true;
 		animator.Play ("PopUp");
+		InputController.lockInput ();
 	}
 
 	public void disappear(){
 		text.text = "";
 		isVisible = false;
 		animator.Play ("Disappear");
+		InputController.unlockInput ();
+		dialogueEndEvent.Invoke ();
 	}
 
 	public void requestClick(){
@@ -149,5 +147,9 @@ public class Dialogue : MonoBehaviour {
 			StartCoroutine ("showNextCharacter");
 		else
 			textIsAppearing = false;
+	}
+
+	public void setVisible(){
+		isVisible = true;
 	}
 }

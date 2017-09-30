@@ -8,6 +8,7 @@ public class CameraController : MonoBehaviour {
 
 	void Start(){
 		zPos = transform.position.z;
+
 	}
 	
 	// Update is called once per frame
