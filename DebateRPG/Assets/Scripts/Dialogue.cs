@@ -74,7 +74,7 @@ public class Dialogue : MonoBehaviour {
 
 	private DialogueGuide guide;
 
-	public static event System.Action dialogueEndEvent;
+	private System.Action dialogueEndEvent;
 
 	public static Dialogue i;
 	void Awake(){
@@ -109,8 +109,9 @@ public class Dialogue : MonoBehaviour {
 	}
 		
 
-	public void showDialogue(){
+	public void showDialogue(System.Action dialogueEndFunc = null){
 		animator.Play ("PopUp");
+		dialogueEndEvent = dialogueEndFunc;
 		InputController.lockInput ();
 	}
 
@@ -119,7 +120,9 @@ public class Dialogue : MonoBehaviour {
 		isVisible = false;
 		animator.Play ("Disappear");
 		InputController.unlockInput ();
-		dialogueEndEvent.Invoke ();
+		if(dialogueEndEvent != null)
+			dialogueEndEvent.Invoke ();
+		dialogueEndEvent = null;
 	}
 
 	public void requestClick(){

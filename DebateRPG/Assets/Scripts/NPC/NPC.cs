@@ -16,13 +16,12 @@ public class NPC : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		enteredSprite = transform.GetChild (0).gameObject;
-		Dialogue.dialogueEndEvent += onDialogueEnd;
 
-		dialogue = new DialogueData (new string[]{ "Hund: ", "Besitzer: ", "Hund: ", "Besitzer: " }, new string[] {
+		dialogue = new DialogueData (new string[]{ "Franz: ", "Du: ", "Franz: ", "Du: " }, new string[] {
 			"Ich liebe dich!",
 			"Ich hasse dich!",
 			"Oh. Ich hasse dich eigentlich auch! :((",
-			"sodunv sourvnowrnv rwoweunv woweu onvpw epwei pöwrifvpiwnv rwin pwrn pwrnvip pwe pwivnip pewi owevnpw piwv pwefnpiew es fpirwbgw pirgn eipw oprwgh psfigjpwri prw owpe ipgnpiwgfhpwe gipwe eipwgnwpeh epg gepw "
+			"Dann haue ich jetzt ab!!"
 		});
 	}
 	
@@ -35,7 +34,7 @@ public class NPC : MonoBehaviour {
 		if (state == NPCState.ENTERED) {
 			state = NPCState.DEBATING;
 			Dialogue.i.resetDialogue (dialogue);
-			Dialogue.i.showDialogue ();
+			Dialogue.i.showDialogue (onDialogueEnd);
 		}
 	}
 

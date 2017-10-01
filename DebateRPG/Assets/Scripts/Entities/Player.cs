@@ -12,6 +12,7 @@ public class Player : Entity {
 	public float jumpForce = 10;
 
 	private bool isGrounded = false;
+	[SerializeField]
 	private bool swordEquiped = false;
 
 	private bool jumped = false;
@@ -79,11 +80,7 @@ public class Player : Entity {
 	void OnTriggerEnter2D(Collider2D c){
 		switch (c.gameObject.tag) {
 		case "EnemyGroop":
-			List<GameObject> children = new List<GameObject> ();
-			foreach (Transform t in c.gameObject.transform) {
-				children.Add (t.gameObject);
-			}
-			BattleStarter.initBattle (this, children.ToArray ());
+			c.gameObject.GetComponent<EnemyGroop> ().playerEnters (swordEquiped);
 			break;
 		case "NPC":
 			c.gameObject.GetComponent<NPC> ().playerEnters ();
